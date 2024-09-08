@@ -25,4 +25,4 @@ class Solution:
         
         odd_power = (n+1)//2
         even = n//2
-        return (pow(4, even)*pow(5,odd_power))%mod        
+        return (pow(4, even)*pow(5,odd_power))%mod

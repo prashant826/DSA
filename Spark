@@ -4,13 +4,19 @@ Apache spark is open source cluster computing framework for real time data proce
 Apache spark uses hadoop file system.
 Types of cluster manager - Spark Standalone cluster, YARN mode, and Spark Mesos
 
+---------------------------------------------------------------------
 Basic data structure of spark is RDD
-Resilient distributed dataset - It is immutable. For every transformation New RDD is being created
-from previous one and DAG is created (Logical plan). 
+Resilient distributed dataset - It is immutable collection of objects
+This object can be anything like string, rows, objects, collections etc.
+
+Each dataset in RDD is divided into different logical partition which may be computed on different nodes
+of the cluster. This is how spark provides data parallelism.
+
+For every transformation New RDD is being created from previous one and DAG is created (Logical plan). 
 Once the actions are called then this Logical plan is given to catalyst optimizer to make a physical plan
 Which then do the optimization, removes the unnecessary steps and gives us faster result on the 
 basis of what is ask.  
-
+---------------------------------------------------------------------
 Main features of spark
 Speed
 1. It supports In memory cluster computing that improves processing speed of an application.
@@ -23,7 +29,50 @@ Speed
 
 4. Spark by default provides us data parallelism with the help of RDD's
 
-Spark Architecture overview
+---------------------------------------------------------------------
+
+Spark Architecture
 
 It follows layered architecture. where each component and layers are loosely coupled and integrated
 with various libraries.
+
+
+				Driver Node (spark context)
+					|
+					|
+				Cluster Manager (Mesos, yarn, Standalone)
+					|
+					|
+			 ---------------
+			|				|
+			|				|				
+		Executors		Executors
+	  (worker nodes)	(worker nodes)
+
+Driver Node (Master node) = The code which we are writing behaves as driver program.
+	In which we are creating a spark context. That establishes a connection to the execution env.
+Like we create a connection for DB. Any command we execute goes through the Connection.
+Any command we execute goes through this spark context.
+
+Cluster Manager- Allocates the resources to the Driver program. Also keeps the cluster health up.
+It distributes the Job taken from Driver node and split it into different task.
+When RDD's are created during the tasks. They are partition , cached and distributed
+accross all the worker nodes. Once the task is completed by the worker they sent the results back
+to Spark Context
+
+Internal working
+Driver -> user application code - > Logical plan (DAG) + optimization --> Physical plan of job
+
+Physical plan (different stages) -> physical unit (tasks) -> blundelling tasks --> executor nodes
+
+
+Working - When user submit application code. driver converts code contains transformation & actions
+into Logical DAG. It also performes certain optimization such as pipelining transformation.
+Then it converts Logical DAG into physical execution plan with many stages.
+After creating physical execution plan it creates physical execution units called tasks under each 
+stages. This tasks are bundeled and send to the cluster.
+
+Note -- Driver program only asks cluster manager to allocate executor nodes.
+But allocating different task among different executor is done by driver node only.
+Each executor before starting they register themselves to the driver. 
+So that driver get the complete view of executors. Can assign the future task based on data placement. 

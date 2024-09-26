@@ -43,11 +43,11 @@ with various libraries.
 				Cluster Manager (Mesos, yarn, Standalone)
 					|
 					|
-			 ---------------
+			 -------------------------------
 			|				|
 			|				|				
-		Executors		Executors
-	  (worker nodes)	(worker nodes)
+		    Executors			    Executors
+	          (worker nodes)	          (worker nodes)
 
 Driver Node (Master node) = The code which we are writing behaves as driver program.
 	In which we are creating a spark context. That establishes a connection to the execution env.

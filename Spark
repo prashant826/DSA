@@ -1,0 +1,29 @@
+
+Apache spark is open source cluster computing framework for real time data processing.
+
+Apache spark uses hadoop file system.
+Types of cluster manager - Spark Standalone cluster, YARN mode, and Spark Mesos
+
+Basic data structure of spark is RDD
+Resilient distributed dataset - It is immutable. For every transformation New RDD is being created
+from previous one and DAG is created (Logical plan). 
+Once the actions are called then this Logical plan is given to catalyst optimizer to make a physical plan
+Which then do the optimization, removes the unnecessary steps and gives us faster result on the 
+basis of what is ask.  
+
+Main features of spark
+Speed
+1. It supports In memory cluster computing that improves processing speed of an application.
+	It is 100 times faster in (In memory computing) and 10 time faster in disk.
+
+2. Powerful caching and disk persistance.
+
+3. Spark is designed for real time data processing and it also supports Big data analytics. ML libraries,
+   Spark Sql, GraphX.
+
+4. Spark by default provides us data parallelism with the help of RDD's
+
+Spark Architecture overview
+
+It follows layered architecture. where each component and layers are loosely coupled and integrated
+with various libraries.

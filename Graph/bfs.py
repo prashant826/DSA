@@ -28,4 +28,4 @@ if __name__ == '__main__':
         #graph[b].add(a)
     start,end = map(int,input().split())
     bfs(graph,start,end)
-    print(prev)
+    print(prev) # if you want prev path

@@ -1,17 +1,16 @@
 from collections import deque
+def dfs(start,graph):
 
-def bfs(graph,start,end):
-    queue = deque()
-    queue.appendleft(start)
-    while queue:
-        vertex = queue.pop()
-        if visited[vertex]: continue
+    stack = [start]
+
+    while stack:
+        vertex = stack.pop()
+        if vertex in visited: continue
         print(vertex,end = " ")
-        visited[vertex] = True 
+        visited.add(vertex)
         for node in graph[vertex]:
-            if visited[node]: continue
-            queue.appendleft(node)
-            prev[node] = vertex
+            if node not in visited:
+                stack.append(node)
 
 if __name__ == '__main__':
     n,k = map(int,input().split())
@@ -27,5 +26,4 @@ if __name__ == '__main__':
         # if un-directed
         #graph[b].add(a)
     start,end = map(int,input().split())
-    bfs(graph,start,end)
-    print(prev)
+    dfs(graph,start,end)

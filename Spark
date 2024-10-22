@@ -75,4 +75,58 @@ stages. This tasks are bundeled and send to the cluster.
 Note -- Driver program only asks cluster manager to allocate executor nodes.
 But allocating different task among different executor is done by driver node only.
 Each executor before starting they register themselves to the driver. 
-So that driver get the complete view of executors. Can assign the future task based on data placement. 
+So that driver get the complete view of executors. Can assign the future task based on data placement.
+
+
+
+
+
+
+
+Q4 quesiton
+
+Created df
+df_dept:
+	Column
+	1. DeptID
+	2. deptName
+df:
+	Column
+	1. EmpId, EmpName, MgrID, DeptID, Sal_Date, Sal
+df = df.withColumn('NewDate' , to_date('Sal_date' , 'dd-MM-YYYY'))
+
+# -------------- 2nd step to join with Dept df to get deptname ----------------
+df1 = df.join(df_dept,df.DeptID == df_Dept.DeptID) # This will have DeptID for both df
+df1 = df.join(df_dept,['DeptID']) # this will only have one deptID
+
+# -------------- 3rd step Self join to get the manager of employe ------
+
+We need to give alias while using left join and select necessary columns,
+from spark.sql.functions import col
+
+df2 = df1.alias('a').join(df1.alias('b'), col('a.MgrId') == col('b.EmpID'), 'left').select(
+	col('deptName'),
+	col('b.EmpName').alias('ManagerName'),
+	col('a.EmpName'),
+	col('a.NewDate'),
+	col('a.salary')
+)
+
+
+# -------------- 4th step doing group by and selecting required columns -----
+
+from spark.sql.functions import year,month
+
+df3 = df2.groupBy(deptName,ManagerName,
+					EmpName, year(NewDate).alias('Year'),
+					month(NewDate).alias('Month')).sum('Salary')
+
+The Date over here is in number format. If you want full or short month name
+We can use date_format
+
+df3 = df2.groupBy(deptName,ManagerName,
+					EmpName, year(NewDate).alias('Year'),
+					date_format(NewDate , 'MMM').alias('Month')).sum('Salary')
+MMM - APR
+MMMM - APRIL
+# --------------------------------------------------------------------------- 

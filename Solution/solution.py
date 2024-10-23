@@ -7,20 +7,7 @@ spark = SparkSession.builder.appName("CustomerDataProcessing").getOrCreate()
 # Function to process data from a file
 def process_customer_data(file_path):
     # Read the data into a DataFrame
-    df = spark.read.option("delimiter", "|").csv(file_path, header=False, inferSchema=True)
-    
-    # Assign column names based on header
-    df = df.withColumnRenamed("_c0", "Record_Type") \
-           .withColumnRenamed("_c1", "Customer_Name") \
-           .withColumnRenamed("_c2", "Customer_Id") \
-           .withColumnRenamed("_c3", "Open_Date") \
-           .withColumnRenamed("_c4", "Last_Consulted_Date") \
-           .withColumnRenamed("_c5", "Vaccination_Id") \
-           .withColumnRenamed("_c6", "Dr_Name") \
-           .withColumnRenamed("_c7", "State") \
-           .withColumnRenamed("_c8", "Country") \
-           .withColumnRenamed("_c9", "DOB") \
-           .withColumnRenamed("_c10", "Is_Active")
+    df = spark.read.option("delimiter", "|").csv(file_path, header=True, inferSchema=True)
 
     # Filter out header records (Record_Type = 'H')
     df_details = df.filter(col("Record_Type") == "D")

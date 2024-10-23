@@ -9,9 +9,6 @@ def process_customer_data(file_path):
     # Read the data into a DataFrame
     df = spark.read.option("delimiter", "|").csv(file_path, header=True, inferSchema=True)
 
-    # Filter out header records (Record_Type = 'H')
-    df_details = df.filter(col("Record_Type") == "D")
-
     # Parse dates
     df_details = df_details.withColumn("Open_Date", to_date(col("Open_Date"), "yyyyMMdd")) \
                            .withColumn("Last_Consulted_Date", to_date(col("Last_Consulted_Date"), "yyyyMMdd")) \

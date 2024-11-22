@@ -1,9 +1,10 @@
 num = float(input())
 
-def self_round(n , power):
-    copy_num = n*10**(power)
+def self_round(n , pow):
+    ten_power = 10**power
+    copy_num = n*ten_power
     if copy_num%10 > 5:
-        return (copy_num+1)/1000
+        return (copy_num+1)/ten_power
     else:
         return n
 
